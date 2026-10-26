@@ -1,1 +1,889 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>СВОЙ КРУГ — Спортивное бизнес-сообщество в Санкт-Петербурге</title>
+  <meta name="description" content="Беговой клуб и турниры по падел-теннису для предпринимателей и управленцев в Санкт-Петербурге.">
 
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              lime: '#D2F802',
+              dark: '#08080A',
+              card: '#121214',
+              border: '#202024',
+              muted: '#8E8E93'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+
+    /* Бегущая строка */
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+
+    /* Мягкая пульсация в ритме сердца */
+    @keyframes heartbeatRing {
+      0% { transform: scale(1); opacity: 0.8; }
+      14% { transform: scale(1.6); opacity: 0.4; }
+      28% { transform: scale(1.15); opacity: 0.7; }
+      42% { transform: scale(2.1); opacity: 0; }
+      100% { transform: scale(1); opacity: 0; }
+    }
+
+    @keyframes heartbeatDot {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.2); }
+      28% { transform: scale(1.05); }
+      42% { transform: scale(1.3); }
+      70% { transform: scale(1); }
+    }
+
+    .heartbeat-ring {
+      animation: heartbeatRing 2.6s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+
+    .heartbeat-dot {
+      animation: heartbeatDot 2.6s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+
+    /* Ротатор с мягким градиентным отсечением */
+    .rotator-track {
+      display: inline-flex;
+      position: relative;
+      overflow: hidden;
+      height: 1.25em;
+      line-height: 1.25;
+      vertical-align: -0.18em;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    }
+
+    .rotator-slider {
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .rotator-slider > span {
+      display: flex;
+      align-items: center;
+      height: 1.25em;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    /* Анимация ошибки и покачивания инпута */
+    @keyframes inputShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px); }
+      40%, 80% { transform: translateX(4px); }
+    }
+    .field-error {
+      border-color: #D2F802 !important;
+      box-shadow: 0 0 16px rgba(210, 248, 2, 0.25) !important;
+      animation: inputShake 0.35s ease;
+    }
+
+    /* Кастомная фирменная подсказка валидации */
+    .custom-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 12px;
+      z-index: 40;
+      background: #141416;
+      border: 1px solid rgba(210, 248, 2, 0.5);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 6px 12px;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 12px rgba(210, 248, 2, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+      white-space: nowrap;
+      animation: tooltipPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .custom-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 16px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: rgba(210, 248, 2, 0.5) transparent transparent transparent;
+    }
+
+    @keyframes tooltipPop {
+      0% { opacity: 0; transform: translateY(4px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-brand-dark text-white selection:bg-brand-lime selection:text-black antialiased">
+
+  <!-- Фиксированный хедер -->
+  <header class="fixed top-0 left-0 right-0 z-50 h-20 bg-brand-dark/95 backdrop-blur-md border-b border-brand-border/80 flex items-center">
+    <div class="max-w-7xl mx-auto w-full px-6 flex items-center justify-between">
+      
+      <!-- Логотип с мягким сердечным пульсом -->
+      <a href="#" class="text-2xl font-black tracking-tighter uppercase flex items-center gap-3">
+        <span class="relative flex h-3 w-3 items-center justify-center">
+          <span class="heartbeat-ring absolute inline-flex h-full w-full rounded-full bg-brand-lime"></span>
+          <span class="heartbeat-dot relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-lime shadow-[0_0_10px_#D2F802]"></span>
+        </span>
+        СВОЙ КРУГ
+      </a>
+
+      <!-- Ссылки -->
+      <nav class="hidden md:flex items-center gap-8 text-xs sm:text-sm font-bold tracking-wider uppercase">
+        <a href="#about" class="text-white/25 hover:text-brand-lime transition-all duration-300">О клубе</a>
+        <a href="#running" class="text-white/25 hover:text-brand-lime transition-all duration-300">Бег</a>
+        <a href="#padel" class="text-white/25 hover:text-brand-lime transition-all duration-300">Падел-теннис</a>
+        <a href="#formats" class="text-white/25 hover:text-brand-lime transition-all duration-300">Форматы</a>
+      </nav>
+
+      <!-- Мобильная кнопка меню -->
+      <button id="mobileMenuBtn" class="md:hidden text-xs uppercase font-bold tracking-wider text-brand-lime border border-brand-border px-3 py-1.5 rounded-lg bg-brand-card">
+        Меню
+      </button>
+
+    </div>
+
+    <!-- Мобильная шторка навигации -->
+    <div id="mobileMenu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-brand-dark border-b border-brand-border p-6 flex flex-col gap-4 text-sm font-semibold uppercase">
+      <a href="#about" class="mobile-link text-neutral-300 hover:text-brand-lime">О клубе</a>
+      <a href="#running" class="mobile-link text-neutral-300 hover:text-brand-lime">Бег</a>
+      <a href="#padel" class="mobile-link text-neutral-300 hover:text-brand-lime">Падел-теннис</a>
+      <a href="#formats" class="mobile-link text-neutral-300 hover:text-brand-lime">Форматы</a>
+      <a href="#join" class="mobile-link bg-brand-lime text-black font-extrabold text-center py-3 rounded-lg text-xs tracking-wider">Оформить гостевой визит</a>
+    </div>
+  </header>
+
+  <!-- Hero Screen -->
+  <section class="min-h-screen pt-28 pb-12 px-6 max-w-7xl mx-auto flex flex-col justify-center">
+    
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
+      
+      <!-- Левая колонка -->
+      <div class="lg:col-span-6 flex flex-col justify-between py-2">
+        
+        <div>
+          <div class="inline-flex items-center gap-2 border border-brand-border bg-brand-card px-4 py-1.5 rounded-full text-xs font-semibold text-brand-lime uppercase tracking-wider mb-8 sm:mb-10 w-max">
+            <span>●</span> Первое спортивное бизнес сообщество
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl lg:text-[3.15rem] font-black uppercase tracking-tight grid gap-y-3 sm:gap-y-4 mb-8 sm:mb-10 leading-none">
+            <span class="block leading-none">МЫ ОБЪЕДИНЯЕМ ФАУНДЕРОВ</span>
+            <span class="block leading-none">И РУКОВОДИТЕЛЕЙ</span>
+            <div class="flex items-center gap-3 flex-wrap sm:flex-nowrap leading-none">
+              <span class="leading-none">ИЗ</span>
+              <div class="rotator-track text-brand-lime" id="rotatorTrack">
+                <div class="rotator-slider" id="rotatorSlider">
+                  <span>IT & РАЗРАБОТКИ</span>
+                  <span>ПРОИЗВОДСТВА</span>
+                  <span>РИТЕЙЛА & E-COM</span>
+                  <span>СТРОИТЕЛЬСТВА</span>
+                  <span>КОНСАЛТИНГА</span>
+                  <span>СФЕРЫ УСЛУГ</span>
+                  <span>ИНВЕСТИЦИЙ</span>
+                </div>
+              </div>
+            </div>
+          </h1>
+
+          <div class="text-base sm:text-lg text-neutral-300 font-normal leading-relaxed space-y-4 mb-8">
+            <p>
+              Регулярные беговые тренировки с профессиональным тренерским составом.
+            </p>
+            <p>
+              Игровые тренировки и турниры по падел-теннису<br class="hidden sm:inline"> в&nbsp;Санкт-Петербурге.
+            </p>
+            <p class="text-neutral-400">
+              <strong class="font-bold text-white">Наша цель</strong> не собрать спортсменов-профессионалов,<br class="hidden sm:inline">
+              а&nbsp;объединить предпринимателей и управленцев любого спортивного бэкграунда.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+          <a href="#join" class="bg-brand-lime text-black font-black text-sm uppercase tracking-widest px-10 py-5 rounded-none sm:rounded-lg text-center hover:bg-white transition-all transform hover:scale-[1.02] shadow-[0_0_30px_rgba(210,248,2,0.25)]">
+            Подать заявку в клуб
+          </a>
+          <a href="#formats" class="border border-brand-border bg-brand-card/80 text-white font-bold text-sm uppercase tracking-wider px-8 py-5 rounded-none sm:rounded-lg text-center hover:border-neutral-400 transition-colors">
+            Форматы участия
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Правая колонка -->
+      <div class="lg:col-span-6 relative mt-6 lg:mt-0 flex">
+        
+        <div class="relative w-full h-[520px] sm:h-[640px] lg:h-[700px] rounded-3xl overflow-hidden border border-brand-border bg-brand-card shadow-2xl">
+          <img 
+            src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1400&q=85" 
+            alt="Атлет на тренировке" 
+            class="w-full h-full object-cover object-center filter grayscale contrast-125 brightness-90 hover:scale-105 transition-transform duration-700"
+          >
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-black/30 pointer-events-none"></div>
+        </div>
+
+        <a href="#join" 
+           class="group absolute -bottom-6 -right-3 sm:-bottom-8 sm:-right-6 w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-brand-lime text-black p-4 flex items-center justify-center text-center shadow-[0_10px_45px_rgba(210,248,2,0.4)] transform hover:scale-105 transition-all duration-300 cursor-pointer">
+          <span class="text-xs sm:text-sm font-black uppercase tracking-tight leading-snug">
+            Оформить<br>гостевой визит
+          </span>
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- Бегущая строка -->
+    <div class="mt-16 py-4 border-y border-brand-border bg-brand-card/50 overflow-hidden relative rounded-xl">
+      <div class="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-brand-dark to-transparent z-10 pointer-events-none"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-brand-dark to-transparent z-10 pointer-events-none"></div>
+
+      <div class="animate-marquee items-center gap-12 text-xs sm:text-sm font-black uppercase tracking-wider">
+        <div class="inline-flex items-center gap-10">
+          <span class="text-neutral-300">ПЕРВОЕ СПОРТИВНОЕ БИЗНЕС-КОМЬЮНИТИ В Г. САНКТ-ПЕТЕРБУРГ И НЕ ТОЛЬКО</span>
+          <span class="text-brand-lime">ПРОЕКТ M&M DIGITAL AGENCY</span>
+        </div>
+        <div class="inline-flex items-center gap-10">
+          <span class="text-neutral-300">ПЕРВОЕ СПОРТИВНОЕ БИЗНЕС-КОМЬЮНИТИ В Г. САНКТ-ПЕТЕРБУРГ И НЕ ТОЛЬКО</span>
+          <span class="text-brand-lime">ПРОЕКТ M&M DIGITAL AGENCY</span>
+        </div>
+        <div class="inline-flex items-center gap-10">
+          <span class="text-neutral-300">ПЕРВОЕ СПОРТИВНОЕ БИЗНЕС-КОМЬЮНИТИ В Г. САНКТ-ПЕТЕРБУРГ И НЕ ТОЛЬКО</span>
+          <span class="text-brand-lime">ПРОЕКТ M&M DIGITAL AGENCY</span>
+        </div>
+        <div class="inline-flex items-center gap-10">
+          <span class="text-neutral-300">ПЕРВОЕ СПОРТИВНОЕ БИЗНЕС-КОМЬЮНИТИ В Г. САНКТ-ПЕТЕРБУРГ И НЕ ТОЛЬКО</span>
+          <span class="text-brand-lime">ПРОЕКТ M&M DIGITAL AGENCY</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 блока преимуществ -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 border-t border-brand-border pt-10 mt-6">
+      
+      <div class="bg-brand-card/60 border border-brand-border/60 rounded-2xl p-5 flex flex-col justify-center overflow-hidden">
+        <p class="text-2xl sm:text-3xl font-black text-brand-lime uppercase tracking-tight leading-none mb-2">0+</p>
+        <p class="text-xs sm:text-[13px] text-neutral-400 font-medium leading-snug break-words">
+          Любой уровень подготовки
+        </p>
+      </div>
+
+      <div class="bg-brand-card/60 border border-brand-border/60 rounded-2xl p-5 flex flex-col justify-center overflow-hidden">
+        <p class="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight leading-none mb-2">Бег</p>
+        <p class="text-xs sm:text-[13px] text-neutral-400 font-medium leading-snug break-words">
+          Зимой в тепле, летом на воздухе
+        </p>
+      </div>
+
+      <div class="bg-brand-card/60 border border-brand-border/60 rounded-2xl p-5 flex flex-col justify-center overflow-hidden">
+        <p class="text-2xl sm:text-3xl font-black text-brand-lime uppercase tracking-tight leading-none mb-2">Padel</p>
+        <p class="text-xs sm:text-[13px] text-neutral-400 font-medium leading-snug break-words">
+          От новичка до рейтинговых игр
+        </p>
+      </div>
+
+      <div class="bg-brand-card/60 border border-brand-border/60 rounded-2xl p-5 flex flex-col justify-center overflow-hidden">
+        <p class="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight leading-none mb-2">Встречи</p>
+        <p class="text-xs sm:text-[13px] text-neutral-400 font-medium leading-snug break-words">
+          Завтраки и общение без регалий
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Смысловой блок -->
+  <section id="about" class="py-14 sm:py-16 bg-brand-card border-y border-brand-border px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-10 sm:mb-12">
+        <h2 class="text-xs font-bold text-brand-lime uppercase tracking-widest mb-2">Концепция сообщества</h2>
+        <p class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-tight whitespace-normal sm:whitespace-nowrap pt-1 leading-tight">
+          Спорт вместо душных конференций
+        </p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-brand-dark p-8 rounded-2xl border border-brand-border">
+          <h3 class="text-brand-lime font-black text-xl mb-3 tracking-tight">Бизнес-окружение</h3>
+          <p class="text-neutral-400 text-sm leading-relaxed">
+            В клубе тренируются фаундеры, топ-менеджеры и предприниматели. Настоящие партнерства строятся на корте и на дистанции, а не за стойками регистрации на форумах.
+          </p>
+        </div>
+        <div class="bg-brand-dark p-8 rounded-2xl border border-brand-border">
+          <h3 class="text-brand-lime font-black text-xl mb-3 tracking-tight">Бережный прогресс</h3>
+          <p class="text-neutral-400 text-sm leading-relaxed">
+            У нас нет задачи выжать из вас все соки. Мы ставим технику, следим за пульсовыми зонами, укрепляем связки и учим получать кайф от процесса без травм.
+          </p>
+        </div>
+        <div class="bg-brand-dark p-8 rounded-2xl border border-brand-border">
+          <h3 class="text-brand-lime font-black text-xl mb-3 tracking-tight">Перезагрузка головы</h3>
+          <p class="text-neutral-400 text-sm leading-relaxed">
+            Смена умственной нагрузки на физическую снимает стресс и возвращает ясность мышления перед принятием ключевых бизнес-решений.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Баннер-манифест без кавычек -->
+  <section class="py-8 sm:py-10 px-6 max-w-7xl mx-auto">
+    <div class="border border-brand-lime/30 bg-brand-card/80 rounded-2xl p-6 sm:p-10 text-center relative overflow-hidden shadow-[0_0_30px_rgba(210,248,2,0.06)]">
+      <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-brand-lime/10 rounded-full blur-3xl pointer-events-none"></div>
+      <p class="text-base sm:text-xl md:text-2xl font-extrabold uppercase tracking-tight text-white leading-snug">
+        ЗДОРОВЬЕ — ЭТО КРЕДИТ ВЫДАННЫЙ НАМ ОТ РОЖДЕНИЯ, КОТОРЫЙ НЕЛЬЗЯ РЕФИНАНСИРОВАТЬ ИЛИ РЕСТРУКТУРИЗИРОВАТЬ
+      </p>
+    </div>
+  </section>
+
+  <!-- Блок: Беговой клуб -->
+  <section id="running" class="pt-4 pb-14 sm:pb-16 px-6 max-w-7xl mx-auto">
+    <div class="mb-10">
+      <span class="text-xs font-bold text-brand-lime uppercase tracking-widest">Направление #1</span>
+      <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight mt-1.5">Беговой клуб</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-brand-card border border-brand-border p-8 sm:p-10 rounded-2xl flex flex-col justify-between">
+        <div>
+          <span class="inline-block bg-blue-500/10 text-blue-400 text-xs font-semibold px-3 py-1 rounded-full mb-4">Зимний сезон</span>
+          <h3 class="text-2xl font-bold mb-3">Легкоатлетический манеж</h3>
+          <p class="text-neutral-400 text-sm mb-6 leading-relaxed">
+            Тренируемся в тепле на профессиональном легкоатлетическом покрытии. Теплые комфортные раздевалки, душевые и идеальное сцепление дорожки — никакого льда, слякоти и риска подвернуть ногу.
+          </p>
+        </div>
+        <ul class="text-sm text-neutral-300 space-y-2.5 border-t border-brand-border pt-5">
+          <li class="flex items-center gap-2 text-brand-lime">✓ <span class="text-neutral-200">Для новичков: базовая техника бега</span></li>
+          <li class="flex items-center gap-2 text-brand-lime">✓ <span class="text-neutral-200">Для опытных спортсменов: развитие отстающих зон</span></li>
+          <li class="flex items-center gap-2 text-brand-lime">✓ <span class="text-neutral-200">Постановка стопы и экономичного шага</span></li>
+          <li class="flex items-center gap-2 text-brand-lime">✓ <span class="text-neutral-200">СБУ (специальные беговые упражнения) и ОФП</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-brand-card border border-brand-border p-8 sm:p-10 rounded-2xl flex flex-col justify-between">
+        <div>
+          <span class="inline-block bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full mb-4">Летний сезон</span>
+          <h3 class="text-2xl font-bold mb-3">Парки и набережные Петербурга</h3>
+          <p class="text-neutral-400 text-sm mb-6 leading-relaxed">
+            С наступлением тепла выходим на открытый воздух: живописные маршруты Крестовского острова, Елагина острова и набережных. Завершаем утренние пробежки кофе и завтраками.
+          </p>
+        </div>
+        <ul class="text-sm text-neutral-300 space-y-2.5 border-t border-brand-border pt-5">
+          <li class="flex items-center gap-2 text-brand-lime">✓ <span class="text-neutral-200">Для новичков: комфортный вход в регулярный бег</span></li>
+          <li class="flex items-center gap-2 text-brand-lime">✓ <span class="text-neutral-200">Для опытных спортсменов: развитие скоростной выносливости</span></li>
+          <li class="flex items-center gap-2 text-brand-lime">✓ <span class="text-neutral-200">Длительные восстановительные кроссы в группе</span></li>
+          <li class="flex items-center gap-2 text-brand-lime">✓ <span class="text-neutral-200">Клубные выезды на полумарафоны и городские старты</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Блок: Падел-теннис -->
+  <section id="padel" class="py-14 sm:py-16 bg-brand-card border-y border-brand-border px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-10 sm:mb-12">
+        <span class="text-xs font-bold text-brand-lime uppercase tracking-widest">Направление #2</span>
+        <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight mt-1.5">Падел-теннис</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-brand-dark p-8 rounded-2xl border border-brand-border">
+          <h3 class="text-brand-lime font-black text-lg mb-2">Низкий порог входа</h3>
+          <div class="text-neutral-400 text-sm leading-relaxed space-y-2">
+            <p>Не нужно годами ставить подачу.</p>
+            <p>15 минут инструктажа перед матчем — и вы уже играете динамичный розыгрыш через стенки корта.</p>
+          </div>
+        </div>
+
+        <div class="bg-brand-dark p-8 rounded-2xl border border-brand-border">
+          <h3 class="text-brand-lime font-black text-lg mb-2">Формат: Только игры</h3>
+          <p class="text-neutral-400 text-sm leading-relaxed">
+            Бронируем современные корты, формируем сбалансированные пары игроков по уровню и проводим регулярные клубные матчи и мини-турниры.
+          </p>
+        </div>
+
+        <div class="bg-brand-dark p-8 rounded-2xl border border-brand-border">
+          <h3 class="text-brand-lime font-black text-lg mb-2">Экипировка на месте</h3>
+          <div class="text-neutral-400 text-sm leading-relaxed space-y-2">
+            <p>Ракетки, мячи и вода предоставляются клубом.</p>
+            <p>Вам нужны только удобные кроссовки и спортивная форма.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Блок: Форматы участия -->
+  <section id="formats" class="py-14 sm:py-16 px-6 max-w-7xl mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-14">
+      <h2 class="text-xs font-bold text-brand-lime uppercase tracking-widest mb-2">Членство в клубе</h2>
+      <p class="text-3xl md:text-5xl font-black uppercase tracking-tight">Выберите свой формат</p>
+    </div>
+
+    <div id="pricingGrid" class="grid md:grid-cols-3 gap-6">
+      
+      <!-- Карточка 1: Гостевой визит -->
+      <div data-plan="guest" class="pricing-card bg-brand-card border-2 border-brand-border p-8 rounded-2xl flex flex-col justify-between transition-all duration-300 relative cursor-pointer">
+        <div class="plan-badge absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-lime text-black text-xs font-black uppercase px-4 py-1 rounded-full opacity-0 pointer-events-none transition-opacity duration-300">
+          Тест-драйв
+        </div>
+        <div>
+          <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Знакомство</span>
+          <h3 class="text-2xl font-bold mt-2 mb-4">Гостевой визит</h3>
+          <p class="text-neutral-400 text-sm mb-6">Идеально, чтобы попробовать формат, познакомиться с тренерами и резидентами клуба.</p>
+          <ul class="plan-features text-sm text-neutral-300 space-y-3 mb-8 transition-colors duration-300">
+            <li class="flex items-center gap-2"><span class="feature-check text-neutral-500 font-bold transition-colors">✓</span> <span>1 тренировка по бегу или участие в игре падел</span></li>
+            <li class="flex items-center gap-2"><span class="feature-check text-neutral-500 font-bold transition-colors">✓</span> <span>Тестирование техники и уровня подготовки</span></li>
+            <li class="flex items-center gap-2"><span class="feature-check text-neutral-500 font-bold transition-colors">✓</span> <span>Вход в закрытый гостевой чат</span></li>
+          </ul>
+        </div>
+        <a href="#join" class="plan-btn w-full block text-center py-3.5 rounded-xl border border-brand-border text-white font-bold text-sm transition-all duration-300">
+          Выбрать гостевой
+        </a>
+      </div>
+
+      <!-- Карточка 2: Стать резидентом -->
+      <div data-plan="resident" class="pricing-card active-plan bg-brand-card border-2 border-brand-lime p-8 rounded-2xl flex flex-col justify-between transition-all duration-300 relative shadow-xl shadow-brand-lime/10 cursor-pointer">
+        <div class="plan-badge absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-lime text-black text-xs font-black uppercase px-4 py-1 rounded-full opacity-100 transition-opacity duration-300">
+          Хит сезона
+        </div>
+        <div>
+          <span class="text-xs font-bold text-brand-lime uppercase tracking-wider">Максимум</span>
+          <h3 class="text-2xl font-bold mt-2 mb-4">Стать резидентом</h3>
+          <p class="text-neutral-400 text-sm mb-6">Полный доступ к спортивной и деловой инфраструктуре клуба на 1 месяц.</p>
+          <ul class="plan-features text-sm text-neutral-300 space-y-3 mb-8 transition-colors duration-300">
+            <li class="flex items-center gap-2"><span class="feature-check text-brand-lime font-bold transition-colors">✓</span> <span>8 беговых тренировок</span></li>
+            <li class="flex items-center gap-2"><span class="feature-check text-brand-lime font-bold transition-colors">✓</span> <span>4 слота на клубные игры в падел-теннис</span></li>
+            <li class="flex items-center gap-2"><span class="feature-check text-brand-lime font-bold transition-colors">✓</span> <span>Закрытый комьюнити-чат резидентов</span></li>
+            <li class="flex items-center gap-2"><span class="feature-check text-brand-lime font-bold transition-colors">✓</span> <span>Участие в завтраках и клубных выездах</span></li>
+          </ul>
+        </div>
+        <a href="#join" class="plan-btn w-full block text-center py-3.5 rounded-xl bg-brand-lime text-black font-extrabold text-sm transition-all duration-300">
+          Стать резидентом
+        </a>
+      </div>
+
+      <!-- Карточка 3: Индивидуальный пакет -->
+      <div data-plan="solo" class="pricing-card bg-brand-card border-2 border-brand-border p-8 rounded-2xl flex flex-col justify-between transition-all duration-300 relative cursor-pointer">
+        <div class="plan-badge absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-lime text-black text-xs font-black uppercase px-4 py-1 rounded-full opacity-0 pointer-events-none transition-opacity duration-300">
+          Фокус
+        </div>
+        <div>
+          <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Фокус</span>
+          <h3 class="text-2xl font-bold mt-2 mb-4">Индивидуальный пакет</h3>
+          <p class="text-neutral-400 text-sm mb-6">Для тех, кто хочет сфокусироваться только на беговой подготовке или только на паделе.</p>
+          <ul class="plan-features text-sm text-neutral-300 space-y-3 mb-8 transition-colors duration-300">
+            <li class="flex items-center gap-2"><span class="feature-check text-neutral-500 font-bold transition-colors">✓</span> <span>Абонемент на 8 занятий бегом ИЛИ 4 игры в падел</span></li>
+            <li class="flex items-center gap-2"><span class="feature-check text-neutral-500 font-bold transition-colors">✓</span> <span>Индивидуальный трекинг прогресса</span></li>
+            <li class="flex items-center gap-2"><span class="feature-check text-neutral-500 font-bold transition-colors">✓</span> <span>Возможность индивидуальных тренировок по запросу</span></li>
+            <li class="flex items-center gap-2"><span class="feature-check text-neutral-500 font-bold transition-colors">✓</span> <span>Доступ к клубным мероприятиям</span></li>
+          </ul>
+        </div>
+        <a href="#join" class="plan-btn w-full block text-center py-3.5 rounded-xl border border-brand-border text-white font-bold text-sm transition-all duration-300">
+          Выбрать направление
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Форма заявки с кастомной валидацией в неоновом стиле -->
+  <section id="join" class="py-20 bg-brand-card border-t border-brand-border px-6">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-10">
+        <span class="text-xs font-bold text-brand-lime uppercase tracking-widest">Анкета кандидата</span>
+        
+        <h2 class="text-2xl sm:text-4xl font-black uppercase tracking-tight mt-2">
+          ПОДАТЬ ЗАЯВКУ В <span class="text-brand-lime">«СВОЙ КРУГ»</span>
+        </h2>
+        
+        <p class="text-neutral-400 text-sm mt-3 leading-relaxed">
+          Мы свяжемся с вами в Telegram или по телефону, расскажем подробности по расписанию<br class="hidden sm:inline">
+          и&nbsp;согласуем дату визита.
+        </p>
+      </div>
+
+      <!-- novalidate отключает стандартные белые подсказки браузера -->
+      <form id="leadForm" novalidate class="space-y-4 bg-brand-dark p-8 rounded-2xl border border-brand-border">
+        
+        <!-- Имя -->
+        <div class="relative">
+          <label class="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+            Ваше имя <span class="text-brand-lime">*</span>
+          </label>
+          <input type="text" name="name" id="nameInput" placeholder="Имя" class="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-brand-lime transition-all">
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <!-- Телефон -->
+          <div class="relative">
+            <label class="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+              Телефон <span class="text-brand-lime">*</span>
+            </label>
+            <input type="tel" name="phone" id="phoneInput" placeholder="+7 (___) ___-__-__" class="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-brand-lime transition-all">
+          </div>
+
+          <!-- Telegram -->
+          <div class="relative">
+            <label class="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+              Ваш юзернейм в Telegram <span class="text-brand-lime">*</span>
+            </label>
+            <input type="text" name="telegram" id="tgInput" placeholder="@username" class="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-brand-lime transition-all">
+          </div>
+        </div>
+
+        <!-- Выбор тарифа -->
+        <div class="relative">
+          <label class="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+            Что интересует в первую очередь? <span class="text-brand-lime">*</span>
+          </label>
+          <select name="interest" id="interestSelect" class="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-brand-lime transition-all">
+            <option value="guest">Гостевой тестовый визит</option>
+            <option value="all">Стать резидентом (Бег и Падел-теннис)</option>
+            <option value="run">Индивидуальный пакет (Бег / Падел по запросу)</option>
+          </select>
+        </div>
+
+        <!-- Сфера бизнеса -->
+        <div class="relative">
+          <label class="block text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+            Сфера деятельности / Бизнес <span class="text-brand-lime">*</span>
+          </label>
+          <input type="text" name="business" id="businessInput" placeholder="IT, производство, сфера услуг, консалтинг..." class="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-brand-lime transition-all">
+        </div>
+
+        <button type="submit" id="submitBtn" class="w-full bg-brand-lime text-black font-extrabold py-4 rounded-xl text-sm uppercase tracking-wider hover:bg-white transition-all mt-4">
+          Отправить заявку
+        </button>
+
+        <p class="text-[11px] text-neutral-500 text-center mt-3">
+          Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Никакого спама.
+        </p>
+
+        <!-- Успешная отправка -->
+        <div id="formSuccess" class="hidden p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-center text-sm">
+          Спасибо! Ваша заявка принята. Координатор клуба свяжется с вами в ближайшее время.
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Футер -->
+  <footer class="py-12 border-t border-brand-border px-6 text-xs text-neutral-500 bg-brand-dark">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <div class="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
+        <div class="flex items-center gap-3">
+          <span class="relative flex h-2.5 w-2.5 items-center justify-center">
+            <span class="heartbeat-ring absolute inline-flex h-full w-full rounded-full bg-brand-lime"></span>
+            <span class="heartbeat-dot relative inline-flex rounded-full h-2 w-2 bg-brand-lime"></span>
+          </span>
+          <span class="font-bold tracking-tight text-white uppercase text-sm">СВОЙ КРУГ</span>
+        </div>
+        <span class="hidden sm:inline text-neutral-600">|</span>
+        <span>© 2026 Санкт-Петербург. Спортивное бизнес-сообщество</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Telegram -->
+        <a href="https://t.me/" target="_blank" rel="noopener noreferrer" 
+           class="w-10 h-10 rounded-xl bg-brand-card border border-brand-border flex items-center justify-center text-neutral-400 hover:text-brand-lime hover:border-brand-lime transition-all transform hover:-translate-y-0.5"
+           title="Telegram">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+          </svg>
+        </a>
+
+        <!-- YouTube -->
+        <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" 
+           class="w-10 h-10 rounded-xl bg-brand-card border border-brand-border flex items-center justify-center text-neutral-400 hover:text-brand-lime hover:border-brand-lime transition-all transform hover:-translate-y-0.5"
+           title="YouTube">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+        </a>
+
+        <!-- VK -->
+        <a href="https://vk.com/" target="_blank" rel="noopener noreferrer" 
+           class="w-10 h-10 rounded-xl bg-brand-card border border-brand-border flex items-center justify-center text-neutral-400 hover:text-brand-lime hover:border-brand-lime transition-all transform hover:-translate-y-0.5"
+           title="ВКонтакте">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M15.684 0H8.316C2.992 0 0 2.992 0 8.316v7.368C0 21.008 2.992 24 8.316 24h7.368C21.008 24 24 21.008 24 15.684V8.316C24 2.992 21.008 0 15.684 0zm3.602 17.297h-1.637c-.62 0-.81-.493-1.924-1.61-.97-.947-1.398-1.07-1.637-1.07-.334 0-.43.096-.43.55v1.442c0 .383-.12.614-1.124.614-1.657 0-3.498-1.006-4.793-2.875-1.96-2.774-2.502-4.86-2.502-5.289 0-.24.096-.456.55-.456h1.638c.407 0 .563.192.718.623.79 2.298 2.106 4.31 2.657 4.31.215 0 .31-.096.31-.623v-2.42c-.072-1.099-.646-1.196-.646-1.589 0-.192.167-.383.43-.383h2.56c.358 0 .479.192.479.599v3.257c0 .359.156.479.263.479.215 0 .383-.12.766-.503 1.196-1.34 2.057-3.424 2.057-3.424.12-.24.31-.456.718-.456h1.638c.493 0 .6.24.493.599-.215.98-2.274 3.878-2.37 4.045-.24.359-.334.526 0 .957.24.335 1.052 1.029 1.589 1.652.981 1.125 1.723 2.057 1.938 2.704.096.383-.096.574-.479.574z"/>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Скрипты -->
+  <script>
+    // 1. Мобильное меню
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+
+    // 2. Линейный ротатор слов
+    const track = document.getElementById('rotatorTrack');
+    const slider = document.getElementById('rotatorSlider');
+    const items = slider.querySelectorAll('span');
+    let currentIndex = 0;
+
+    function syncWidth() {
+      track.style.width = items[currentIndex].offsetWidth + 'px';
+    }
+
+    window.addEventListener('load', syncWidth);
+
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % items.length;
+      slider.style.transform = `translateY(-${currentIndex * 1.25}em)`;
+      syncWidth();
+    }, 2400);
+
+    // 3. Тарифы
+    const pricingGrid = document.getElementById('pricingGrid');
+    const cards = pricingGrid.querySelectorAll('.pricing-card');
+    const defaultCard = pricingGrid.querySelector('[data-plan="resident"]');
+    const interestSelect = document.getElementById('interestSelect');
+
+    function highlightCard(activeCard) {
+      cards.forEach(card => {
+        const btn = card.querySelector('.plan-btn');
+        const badge = card.querySelector('.plan-badge');
+        const checkIcons = card.querySelectorAll('.feature-check');
+        const listItems = card.querySelectorAll('.plan-features li');
+
+        if (card === activeCard) {
+          card.classList.remove('border-brand-border');
+          card.classList.add('border-brand-lime', 'shadow-xl', 'shadow-brand-lime/10', '-translate-y-1');
+          
+          btn.classList.remove('border', 'border-brand-border', 'text-white');
+          btn.classList.add('bg-brand-lime', 'text-black', 'font-extrabold');
+
+          if (badge) {
+            badge.classList.remove('opacity-0');
+            badge.classList.add('opacity-100');
+          }
+
+          checkIcons.forEach(icon => {
+            icon.classList.remove('text-neutral-500');
+            icon.classList.add('text-brand-lime');
+          });
+          listItems.forEach(li => {
+            li.classList.remove('text-neutral-300');
+            li.classList.add('text-white');
+          });
+
+        } else {
+          card.classList.remove('border-brand-lime', 'shadow-xl', 'shadow-brand-lime/10', '-translate-y-1');
+          card.classList.add('border-brand-border');
+
+          btn.classList.remove('bg-brand-lime', 'text-black', 'font-extrabold');
+          btn.classList.add('border', 'border-brand-border', 'text-white');
+
+          if (badge) {
+            badge.classList.remove('opacity-100');
+            badge.classList.add('opacity-0');
+          }
+
+          checkIcons.forEach(icon => {
+            icon.classList.remove('text-brand-lime');
+            icon.classList.add('text-neutral-500');
+          });
+          listItems.forEach(li => {
+            li.classList.remove('text-white');
+            li.classList.add('text-neutral-300');
+          });
+        }
+      });
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', () => highlightCard(card));
+      card.addEventListener('click', () => {
+        const plan = card.getAttribute('data-plan');
+        if (plan === 'guest') interestSelect.value = 'guest';
+        if (plan === 'resident') interestSelect.value = 'all';
+        if (plan === 'solo') interestSelect.value = 'run';
+      });
+    });
+
+    pricingGrid.addEventListener('mouseleave', () => {
+      highlightCard(defaultCard);
+    });
+
+    // 4. Маска для поля Имя: строго буквы (русские/латиница), пробелы и дефис
+    const nameInput = document.getElementById('nameInput');
+    nameInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ\s\-]/g, '');
+    });
+
+    // 5. Маска телефона: строго цифры и знак плюс
+    const phoneInput = document.getElementById('phoneInput');
+    phoneInput.addEventListener('input', (e) => {
+      let raw = e.target.value.replace(/[^\d+]/g, '');
+      let digits = raw.replace(/\D/g, '');
+      
+      if (digits.startsWith('7') || digits.startsWith('8')) {
+        digits = digits.substring(1);
+      }
+      
+      let res = '+7';
+      if (digits.length > 0) res += ' (' + digits.substring(0, 3);
+      if (digits.length >= 3) res += ') ' + digits.substring(3, 6);
+      if (digits.length >= 6) res += '-' + digits.substring(6, 8);
+      if (digits.length >= 8) res += '-' + digits.substring(8, 10);
+      
+      e.target.value = digits.length === 0 ? '' : res;
+    });
+
+    // 6. Маска ника в Telegram: автоматический @ при вводе и вставке
+    const tgInput = document.getElementById('tgInput');
+    const businessInput = document.getElementById('businessInput');
+
+    tgInput.addEventListener('focus', (e) => {
+      if (!e.target.value) {
+        e.target.value = '@';
+      }
+    });
+
+    tgInput.addEventListener('input', (e) => {
+      let val = e.target.value.trim();
+      val = val.replace(/^(https?:\/\/)?(www\.)?t\.me\//i, '');
+      val = val.replace(/@+/g, '');
+      val = val.replace(/[^a-zA-Z0-9_]/g, '');
+
+      if (val.length > 0) {
+        e.target.value = '@' + val;
+      } else {
+        e.target.value = '@';
+      }
+    });
+
+    tgInput.addEventListener('blur', (e) => {
+      if (e.target.value === '@') {
+        e.target.value = '';
+      }
+    });
+
+    // 7. Кастомная система подсказок валидации в стиле сайта
+    function clearTooltips() {
+      document.querySelectorAll('.custom-tooltip').forEach(tip => tip.remove());
+      document.querySelectorAll('.field-error').forEach(input => input.classList.remove('field-error'));
+    }
+
+    function showTooltip(input, message) {
+      clearTooltips();
+      input.classList.add('field-error');
+      input.focus();
+
+      const tooltip = document.createElement('div');
+      tooltip.className = 'custom-tooltip';
+      tooltip.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-brand-lime"></span><span>${message}</span>`;
+      
+      input.parentElement.appendChild(tooltip);
+
+      const removeHandler = () => {
+        tooltip.remove();
+        input.classList.remove('field-error');
+        input.removeEventListener('input', removeHandler);
+      };
+      input.addEventListener('input', removeHandler);
+    }
+
+    // 8. Обработка отправки формы
+    const form = document.getElementById('leadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMsg = document.getElementById('formSuccess');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearTooltips();
+
+      // Проверка имени
+      if (!nameInput.value.trim()) {
+        showTooltip(nameInput, 'Пожалуйста, укажите ваше имя');
+        return;
+      }
+
+      // Проверка телефона
+      if (!phoneInput.value.trim() || phoneInput.value.length < 18) {
+        showTooltip(phoneInput, 'Введите полный номер телефона (+7 ...)');
+        return;
+      }
+
+      // Проверка Telegram
+      const cleanTg = tgInput.value.replace('@', '').trim();
+      if (!cleanTg) {
+        showTooltip(tgInput, 'Укажите ваш ник в Telegram (@username)');
+        return;
+      }
+
+      // Проверка сферы деятельности
+      if (!businessInput.value.trim()) {
+        showTooltip(businessInput, 'Укажите сферу деятельности или бизнес');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Отправка...';
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      const urlParams = new URLSearchParams(window.location.search);
+      data.utm_source = urlParams.get('utm_source') || 'direct';
+      data.utm_medium = urlParams.get('utm_medium') || '';
+      data.utm_campaign = urlParams.get('utm_campaign') || '';
+
+      console.log('Лид:', data);
+
+      setTimeout(() => {
+        form.reset();
+        submitBtn.classList.add('hidden');
+        successMsg.classList.remove('hidden');
+      }, 700);
+    });
+  </script>
+</body>
+</html>
