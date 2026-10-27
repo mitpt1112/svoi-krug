@@ -1,52 +1,52 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>СВОЙ КРУГ — Спортивное бизнес-сообщество в Санкт-Петербурге</title>
   <meta name="description" content="Беговой клуб и турниры по падел-теннису для предпринимателей и управленцев в Санкт-Петербурге.">
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              lime: '#D2F802',
-              dark: '#08080A',
-              card: '#121214',
-              border: '#202024',
-              muted: '#8E8E93'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Шрифты -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-    body { font-family: 'Inter', sans-serif; }
+    :root {
+      --lime: #D2F802;
+      --dark: #08080A;
+      --card: #121214;
+      --border: #202024;
+    }
+
+    html, body {
+      background-color: var(--dark);
+      color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      width: 100%;
+    }
 
     /* Бегущая строка */
     @keyframes marquee {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-50%); }
     }
-    .animate-marquee {
+    .marquee-track {
       display: flex;
       width: max-content;
-      animation: marquee 28s linear infinite;
+      animation: marquee 25s linear infinite;
     }
-    .animate-marquee:hover {
+    .marquee-track:hover {
       animation-play-state: paused;
     }
 
-    /* Мягкая пульсация в ритме сердца */
+    /* Пульсация сердца */
     @keyframes heartbeatRing {
       0% { transform: scale(1); opacity: 0.8; }
       14% { transform: scale(1.6); opacity: 0.4; }
@@ -54,7 +54,6 @@
       42% { transform: scale(2.1); opacity: 0; }
       100% { transform: scale(1); opacity: 0; }
     }
-
     @keyframes heartbeatDot {
       0%, 100% { transform: scale(1); }
       14% { transform: scale(1.2); }
@@ -62,75 +61,62 @@
       42% { transform: scale(1.3); }
       70% { transform: scale(1); }
     }
-
-    .heartbeat-ring {
+    .pulse-ring {
       animation: heartbeatRing 2.6s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
     }
-
-    .heartbeat-dot {
+    .pulse-dot {
       animation: heartbeatDot 2.6s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
     }
 
-    /* Ротатор с мягким градиентным отсечением */
-    .rotator-track {
+    /* Ротатор слов */
+    .rotator-container {
       display: inline-flex;
       position: relative;
       overflow: hidden;
       height: 1.25em;
       line-height: 1.25;
       vertical-align: -0.18em;
-      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: width 0.3s ease;
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
       mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
     }
-
-    .rotator-slider {
+    .rotator-list {
       display: flex;
       flex-direction: column;
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
-    .rotator-slider > span {
+    .rotator-list > span {
       display: flex;
       align-items: center;
       height: 1.25em;
       line-height: 1.25;
       white-space: nowrap;
+      color: var(--lime);
     }
 
-    /* Анимация ошибки и покачивания инпута */
-    @keyframes inputShake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-4px); }
-      40%, 80% { transform: translateX(4px); }
-    }
+    /* Кастомная подсказка валидации */
     .field-error {
-      border-color: #D2F802 !important;
+      border-color: var(--lime) !important;
       box-shadow: 0 0 16px rgba(210, 248, 2, 0.25) !important;
-      animation: inputShake 0.35s ease;
     }
-
-    /* Кастомная фирменная подсказка валидации */
     .custom-tooltip {
       position: absolute;
       bottom: calc(100% + 8px);
       left: 12px;
-      z-index: 40;
+      z-index: 50;
       background: #141416;
       border: 1px solid rgba(210, 248, 2, 0.5);
       color: #fff;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.02em;
       padding: 6px 12px;
       border-radius: 8px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 12px rgba(210, 248, 2, 0.15);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
       display: flex;
       align-items: center;
       gap: 6px;
       pointer-events: none;
       white-space: nowrap;
-      animation: tooltipPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .custom-tooltip::after {
       content: '';
@@ -141,27 +127,29 @@
       border-style: solid;
       border-color: rgba(210, 248, 2, 0.5) transparent transparent transparent;
     }
-
-    @keyframes tooltipPop {
-      0% { opacity: 0; transform: translateY(4px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </head>
-<body class="bg-brand-dark text-white selection:bg-brand-lime selection:text-black antialiased">
+<body class="bg-[#08080A] text-white selection:bg-[#D2F802] selection:text-black">
 
-  <!-- Фиксированный хедер -->
-  <header class="fixed top-0 left-0 right-0 z-50 h-20 bg-brand-dark/95 backdrop-blur-md border-b border-brand-border/80 flex items-center">
+  <!-- Хедер -->
+  <header class="fixed top-0 left-0 right-0 z-50 h-20 bg-[#08080A]/95 backdrop-blur-md border-b border-[#202024] flex items-center">
     <div class="max-w-7xl mx-auto w-full px-6 flex items-center justify-between">
-      
-      <!-- Логотип с мягким сердечным пульсом -->
       <a href="#" class="text-2xl font-black tracking-tighter uppercase flex items-center gap-3">
         <span class="relative flex h-3 w-3 items-center justify-center">
-          <span class="heartbeat-ring absolute inline-flex h-full w-full rounded-full bg-brand-lime"></span>
-          <span class="heartbeat-dot relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-lime shadow-[0_0_10px_#D2F802]"></span>
+          <span class="pulse-ring absolute inline-flex h-full w-full rounded-full bg-[#D2F802]"></span>
+          <span class="pulse-dot relative inline-flex rounded-full h-2.5 w-2.5 bg-[#D2F802] shadow-[0_0_10px_#D2F802]"></span>
         </span>
         СВОЙ КРУГ
       </a>
 
-      <!-- Ссылки -->
-      <nav class="hidden md:flex items
+      <nav class="hidden md:flex items-center gap-8 text-xs sm:text-sm font-bold tracking-wider uppercase">
+        <a href="#about" class="text-white/40 hover:text-[#D2F802] transition-colors">О клубе</a>
+        <a href="#running" class="text-white/40 hover:text-[#D2F802] transition-colors">Бег</a>
+        <a href="#padel" class="text-white/40 hover:text-[#D2F802] transition-colors">Падел-теннис</a>
+        <a href="#formats" class="text-white/40 hover:text-[#D2F802] transition-colors">Форматы</a>
+      </nav>
+
+      <button id="mobileMenuBtn" class="md:hidden text-xs uppercase font-bold tracking-wider text-[#D2F802] border border-[#202024] px-3 py-1.5 rounded-lg bg-[#121214]">
+        Меню
+      </button>
+    </div>
